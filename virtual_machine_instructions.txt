@@ -1,0 +1,85 @@
+1) Alma Linux can be downloaded from
+
+http://mirror.csclub.uwaterloo.ca/almalinux/9.0/isos/x86_64/
+
+Suggested to use 'minimal' iso if a graphical environent is not needed.
+use 'dvd' if a graphical environment is needed.  Alternatively minimal can 
+be used and the graphical environment setup at the bottom of this file can be run.
+
+2) Many different Virtual Machine Managers can be used.  Please ensure that
+the host can make network connections to the virtual machine.  Testing will
+be difficult otherwise.
+
+3) Hard Drive should be 20G in size
+
+4) Once The VM is running, ensure that you can SSH into the machine
+along with having 'console' access.
+
+In the virtual machine (either SSH or console) 
+
+5) Run the following commands inside the virtual machine
+
+```
+su
+dnf update -y
+dnf install epel-release -y
+dnf install clang -y
+dnf --enablerepo=crb install libbpf-devel -y
+dnf install netcat cockpit bpftool -y
+systemctl enable --now cockpit.socket
+
+exit # to exit from root privileges
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+((choose 1 for default))
+source "$HOME/.cargo/env/
+```
+
+6) Copy the project.tar.gz onto the virtual Machine
+eg (on the host)
+scp project.tar.gz <username>@<ip of vm>:/home/<username>/
+for the user mm with an ip of the virtual machine as 192.168.0.43 the command is
+scp project.tar.gz mm@192.168.0.43:/home/mm/
+
+7) Run the following commands inside the virtual machine to test the rust compiler
+```
+tar -xzvf project.tar.gz
+cd port_blocker
+cargo check
+```
+
+You should compile a lot of Rust code, but run into the first compilation error
+
+8) Run the following commands in the virtual machine to test if clang is available
+```
+make bpf
+```
+
+You should be presented with a compiler warning, but target/bpf/block.bpf.o 
+should exist
+
+EDITORS
+
+You can install an editor via
+sudo dnf install nvim
+sudo dnv install vim
+sudo dnf install nano
+sudo dnf install emacs
+
+GRAPHICAL ENVIRONMENT FROM MINIMAL ISO
+
+sudo dnf group install "Server with GUI"
+sudo systemctl enable --now gdm
+
+NOTE: Upon reboot the gui might not start up. In such a case you will need to
+`sudo systemctl start gdm` on every reboot
+
+After logging in, You may need to re-enable networking after this.  To do so
+In the upper right hand corner of the GUI. Click Settings.  Click on Network
+Click the + button next to "Wired".  Click Add.  You should now have network
+access
+
+Visual Studio Code as an EDITOR
+Instructions can be found here:
+https://code.visualstudio.com/docs/setup/linux#_rhel-fedora-and-centos-based-distributions
+Alma Linux 9 is based on Fedora 34 and thus uses the dnf method of (Fedora 22 and above)

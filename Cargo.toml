@@ -1,0 +1,23 @@
+[package]
+name = "port_blocker"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "*"
+clap = { version = "*", features = ["derive"] }
+libbpf-rs = "*"
+#libbpf-rs = { path = "../libbpf-rs/libbpf-rs" }
+libc = "*"
+
+[build-dependencies]
+libbpf-cargo = "*"
+
+[lib]
+name = "lib"
+path = "src/lib.rs"
+
+[[bin]]
+name = "port_blocker"
+path = "src/main.rs"
+

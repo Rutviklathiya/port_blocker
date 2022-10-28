@@ -1,0 +1,4 @@
+src/bpf/block.bpf.c is licenced under the GPL-3.0
+https://www.gnu.org/licenses/gpl-3.0.html
+
+All other files are copyright Blackberry, Ltd
